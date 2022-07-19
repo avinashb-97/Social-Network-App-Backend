@@ -1,4 +1,4 @@
-package com.qmul.Social.Network.model;
+package com.qmul.Social.Network.model.persistence;
 
 
 import lombok.Getter;
@@ -7,12 +7,13 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "INSTITUTIONS")
-public class Instituion {
+@Table(name = "INSTITUTION")
+public class Institution {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,10 +21,12 @@ public class Instituion {
 
     private String name;
 
-    @Column(unique = true)
-    private String adminMail;
+    @OneToMany(mappedBy = "institution", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<User> users;
 
-    private String password;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "admin_id", referencedColumnName = "id")
+//    private User admin;
 
     private String code;
 

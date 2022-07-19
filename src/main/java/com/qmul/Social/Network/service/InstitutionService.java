@@ -1,6 +1,7 @@
 package com.qmul.Social.Network.service;
 
-import com.qmul.Social.Network.model.Instituion;
+import com.qmul.Social.Network.model.persistence.Institution;
+import com.qmul.Social.Network.model.persistence.User;
 import com.qmul.Social.Network.model.repository.InstitutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,16 +14,22 @@ public class InstitutionService {
     private InstitutionRepository institutionRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Instituion createInstitution(Instituion instituion, String password)
+    public Institution createInstitution(String instituionName, String adminMail, String password)
     {
-        if(institutionRepository.existsInstituionByName(instituion.getName()))
+        if(institutionRepository.existsInstituionByName(instituionName))
         {
-            return instituion;
+            throw new RuntimeException("Institution already exists");
         }
-        instituion.setPassword(bCryptPasswordEncoder.encode(password));
-        instituion = institutionRepository.save(instituion);
-        return instituion;
+        User user = userService.createInstitutionAdmin(adminMail, password);
+        Institution institution = new Institution();
+        institution.setName(instituionName);
+//        instituion.setPassword(bCryptPasswordEncoder.encode(password));
+        institution = institutionRepository.save(institution);
+        return institution;
     }
 }

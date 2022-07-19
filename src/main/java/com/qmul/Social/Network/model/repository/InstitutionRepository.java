@@ -1,17 +1,15 @@
 package com.qmul.Social.Network.model.repository;
 
-import com.qmul.Social.Network.model.Instituion;
+import com.qmul.Social.Network.model.persistence.Institution;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface InstitutionRepository extends JpaRepository<Instituion, String> {
+public interface InstitutionRepository extends JpaRepository<Institution, String> {
 
-    public Optional<Instituion> findInstituionByAdminMail(String email);
-
-    public Optional<Instituion> findInstituionByCode(String code);
+    public Optional<Institution> findInstituionByCode(String code);
 
     public boolean existsInstituionByName(String institutionName);
 
