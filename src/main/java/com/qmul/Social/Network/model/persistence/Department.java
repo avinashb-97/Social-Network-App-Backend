@@ -1,20 +1,15 @@
 package com.qmul.Social.Network.model.persistence;
 
-
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
-@Getter
-@Setter
 @Entity
-@Table(name = "INSTITUTION")
-public class Institution {
+public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,10 +17,11 @@ public class Institution {
 
     private String name;
 
-    @OneToMany(mappedBy = "institution", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<User> users;
 
-    private String code;
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Course> courses;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

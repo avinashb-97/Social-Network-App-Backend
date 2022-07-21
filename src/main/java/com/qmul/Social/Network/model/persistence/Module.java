@@ -1,8 +1,5 @@
 package com.qmul.Social.Network.model.persistence;
 
-
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,11 +7,8 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
-@Getter
-@Setter
 @Entity
-@Table(name = "INSTITUTION")
-public class Institution {
+public class Module {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,10 +16,13 @@ public class Institution {
 
     private String name;
 
-    @OneToMany(mappedBy = "institution", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<User> users;
+    @ManyToMany
+    @JoinTable(name = "module_users", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "module_id"))
+    Set<User> users;
 
-    private String code;
+    @ManyToMany
+    @JoinTable(name = "module_courses", joinColumns = @JoinColumn(name = "course_id"), inverseJoinColumns = @JoinColumn(name = "module_id"))
+    Set<Course> courses;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -36,5 +33,5 @@ public class Institution {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
-
 }
+

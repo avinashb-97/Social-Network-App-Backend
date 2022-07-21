@@ -8,6 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 @Service
 public class InstitutionService {
@@ -32,7 +34,7 @@ public class InstitutionService {
         institution.setName(instituionName);
         institution = institutionRepository.save(institution);
         User user = userService.createInstitutionAdmin(adminMail, password, institution);
-        institution.setUsers(Arrays.asList(user));
+        institution.setUsers(new HashSet(){{add(user);}});
         return institution;
     }
 }

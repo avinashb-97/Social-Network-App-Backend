@@ -39,6 +39,17 @@ public class User {
     @JoinColumn(name = "institution_id", nullable = false)
     private Institution institution;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
+
+    @ManyToMany(mappedBy = "users")
+    private Set<Module> modules;
+
     @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     private boolean accountNonLocked = true;
 

@@ -88,7 +88,7 @@ public class UserService {
     {
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(Role.USER);
-        roleSet.add(Role.MODERATOR);
+        roleSet.add(Role.STAFF);
         roleSet.add(Role.ADMIN);
         user.setRoles(roleSet);
         return user;
@@ -100,7 +100,7 @@ public class UserService {
     }
 
     public User findUserById(Long id) {
-        return userRepository.findById(id.toString())
+        return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found, userid -> "+id));
     }
 

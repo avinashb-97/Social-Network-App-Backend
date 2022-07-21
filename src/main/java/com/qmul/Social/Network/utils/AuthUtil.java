@@ -32,13 +32,18 @@ public class AuthUtil {
         {
             return Role.ADMIN;
         }
-        if(roles.contains(new SimpleGrantedAuthority(Role.MODERATOR.toString())))
+        if(roles.contains(new SimpleGrantedAuthority(Role.STAFF.toString())))
         {
-            return Role.MODERATOR;
+            return Role.STAFF;
         }
         if (roles.contains(new SimpleGrantedAuthority(Role.USER.toString())))
         {
             return Role.USER;
+        }
+
+        if (roles.contains(new SimpleGrantedAuthority(Role.RECRUITER.toString())))
+        {
+            return Role.RECRUITER;
         }
         return null;
     }
@@ -48,9 +53,9 @@ public class AuthUtil {
         return getCurrentUserRole() == Role.ADMIN;
     }
 
-    public static boolean isCurrentUserIsModerator()
+    public static boolean isCurrentUserIsStaff()
     {
-        return getCurrentUserRole() == Role.MODERATOR;
+        return getCurrentUserRole() == Role.STAFF;
     }
 
     public static boolean isCurrentUserIsUser()
