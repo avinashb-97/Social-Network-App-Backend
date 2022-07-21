@@ -3,6 +3,7 @@ package com.qmul.Social.Network.service;
 
 import com.qmul.Social.Network.conf.constants.SecurityConstants;
 import com.qmul.Social.Network.exception.UserNotFoundException;
+import com.qmul.Social.Network.model.persistence.Institution;
 import com.qmul.Social.Network.model.persistence.User;
 import com.qmul.Social.Network.model.persistence.enums.Role;
 import com.qmul.Social.Network.model.repository.UserRepository;
@@ -75,10 +76,11 @@ public class UserService {
         return user;
     }
 
-    public User createInstitutionAdmin(String adminMail, String password)
+    public User createInstitutionAdmin(String adminMail, String password, Institution institution)
     {
         User user = new User();
         user.setEmail(adminMail);
+        user.setInstitution(institution);
         return createUser(user, password, true);
     }
 

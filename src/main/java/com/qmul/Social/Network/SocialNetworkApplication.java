@@ -20,20 +20,22 @@ public class SocialNetworkApplication {
 //	@Bean
 //	public BCryptPasswordEncoder bCryptPasswordEncoder(){
 //		return new BCryptPasswordEncoder();
+////	}
+//
+//	@Configuration
+//	public class MyConfiguration {
+//
+//		@Bean
+//		public WebMvcConfigurer corsConfigurer() {
+//			return new WebMvcConfigurerAdapter() {
+//				@Override
+//				public void addCorsMappings(CorsRegistry registry) {
+//					registry.addMapping("/***")
+//							.allowedOrigins("http://localhost:3000")
+//							.allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
+//				}
+//			};
+//		}
 //	}
 
-	@Configuration
-	public class MyConfiguration {
-
-		@Bean
-		public WebMvcConfigurer corsConfigurer() {
-			return new WebMvcConfigurerAdapter() {
-				@Override
-				public void addCorsMappings(CorsRegistry registry) {
-					registry.addMapping("/**")
-							.allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
-				}
-			};
-		}
-	}
 }

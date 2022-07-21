@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 @Service
 public class InstitutionService {
 
@@ -25,11 +27,12 @@ public class InstitutionService {
         {
             throw new RuntimeException("Institution already exists");
         }
-        User user = userService.createInstitutionAdmin(adminMail, password);
+
         Institution institution = new Institution();
         institution.setName(instituionName);
-//        instituion.setPassword(bCryptPasswordEncoder.encode(password));
         institution = institutionRepository.save(institution);
+        User user = userService.createInstitutionAdmin(adminMail, password, institution);
+        institution.setUsers(Arrays.asList(user));
         return institution;
     }
 }
