@@ -1,15 +1,14 @@
 package com.qmul.Social.Network.dto;
 
 
+import com.mysql.cj.xdevapi.Collection;
 import com.qmul.Social.Network.model.persistence.Department;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -19,6 +18,8 @@ public class DepartmentDTO {
     private long id;
 
     private String name;
+
+    private Date createdTime;
 
     public static DepartmentDTO convertEntityToDepartmentDTO(Department department)
     {
@@ -34,6 +35,7 @@ public class DepartmentDTO {
         {
             departmentDTOList.add(convertEntityToDepartmentDTO(department));
         }
+        Collections.sort(departmentDTOList, (a,b) -> a.getCreatedTime().compareTo(b.getCreatedTime()));
         return departmentDTOList;
     }
 }

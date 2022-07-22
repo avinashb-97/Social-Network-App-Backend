@@ -2,10 +2,8 @@ package com.qmul.Social.Network.controller;
 
 import com.qmul.Social.Network.dto.DepartmentDTO;
 import com.qmul.Social.Network.model.persistence.Department;
-import com.qmul.Social.Network.model.persistence.Institution;
 import com.qmul.Social.Network.model.requests.CreateDepartmentRequest;
 import com.qmul.Social.Network.service.DepartmentService;
-import com.qmul.Social.Network.utils.HelperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,16 +23,14 @@ public class DepartmentController {
     {
 
         String deptName = createDepartmentRequest.getName();
-        Institution institution = HelperUtil.getCurrentInstitution();
-        Department department = departmentService.createDepartment(institution, deptName);
+        Department department = departmentService.createDepartmentForCurrentInstitution(deptName);
         return ResponseEntity.ok(DepartmentDTO.convertEntityToDepartmentDTO(department));
     }
 
     @GetMapping
     public ResponseEntity<List<DepartmentDTO>> getAllDepartMent()
     {
-        Institution institution = HelperUtil.getCurrentInstitution();
-        Set<Department> departmentSet = institution.getDepartments();
+        Set<Department> departmentSet = departmentService.getAllDepartmentofCurrentInstitute();
         return ResponseEntity.ok(DepartmentDTO.convertEntityListToDepartmentDTOList(departmentSet));
     }
 

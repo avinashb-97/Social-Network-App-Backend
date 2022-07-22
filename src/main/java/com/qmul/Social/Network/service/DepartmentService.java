@@ -7,24 +7,37 @@ import com.qmul.Social.Network.model.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class DepartmentService {
 
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    public Department createDepartment(Institution institution, String departmentName)
+    @Autowired
+    private InstitutionService institutionService;
+
+    public Department createDepartmentForCurrentInstitution(String departmentName)
     {
         Department department = new Department();
         department.setName(departmentName);
-        department.setInstitution(institution);
+        department.setInstitution(institutionService.getCurrentInstitution());
         return departmentRepository.save(department);
+    }
+
+    public Set<Department> getAllDepartmentofCurrentInstitute()
+    {
+        return institutionService.getCurrentInstitution().getDepartments();
     }
 
     public Department getDepartmentByID(Long id)
     {
-        Department department = departmentRepository.getReferenceById(id);
-        if(department == null)
+        Department department = null;
+        try {
+            department =  departmentRepository.getReferenceById(id);
+        }
+        catch (Exception e)
         {
             throw new DepartmentNotFoundException("Department not found "+id);
         }

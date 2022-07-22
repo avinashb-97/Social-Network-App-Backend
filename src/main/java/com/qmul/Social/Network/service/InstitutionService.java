@@ -37,4 +37,9 @@ public class InstitutionService {
         institution.setUsers(new HashSet(){{add(user);}});
         return institution;
     }
+
+    public Institution getCurrentInstitution()
+    {
+        return userService.getCurrentUser().getInstitution();
+    }
 }
