@@ -44,22 +44,22 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
                 .antMatchers(HttpMethod.POST, SecurityConstants.INSTITUTE_SIGN_UP_URL).permitAll()
 
-                .antMatchers(HttpMethod.GET, "/api/product/**").permitAll()
-                .antMatchers("/api/product/**").hasAnyAuthority("MODERATOR", "ADMIN")
-
-                .antMatchers(HttpMethod.GET, "/api/category/**").permitAll()
-                .antMatchers("/api/category/**").hasAnyAuthority("MODERATOR", "ADMIN")
-
-                .antMatchers(HttpMethod.GET, "/api/user/confirm-account").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/user/**").permitAll()
-
-                .antMatchers("/api/test/**").permitAll()
-                .antMatchers("/api/order/**").hasAnyAuthority("USER")
-                .antMatchers("/api/admin/**").hasAnyAuthority("MODERATOR", "ADMIN")
-
-                .antMatchers("/api/query").permitAll()
-
-                .antMatchers(HttpMethod.POST,"/api/guest/order").permitAll()
+//                .antMatchers(HttpMethod.GET, "/api/product/**").permitAll()
+//                .antMatchers("/api/product/**").hasAnyAuthority("MODERATOR", "ADMIN")
+//
+//                .antMatchers(HttpMethod.GET, "/api/category/**").permitAll()
+//                .antMatchers("/api/category/**").hasAnyAuthority("MODERATOR", "ADMIN")
+//
+//                .antMatchers(HttpMethod.GET, "/api/user/confirm-account").permitAll()
+//                .antMatchers(HttpMethod.POST, "/api/user/**").permitAll()
+//
+//                .antMatchers("/api/test/**").permitAll()
+//                .antMatchers("/api/order/**").hasAnyAuthority("USER")
+//                .antMatchers("/api/admin/**").hasAnyAuthority("MODERATOR", "ADMIN")
+//
+//                .antMatchers("/api/query").permitAll()
+//
+//                .antMatchers(HttpMethod.POST,"/api/guest/order").permitAll()
 
                 .antMatchers(SWAGGER_AUTH_WHITELIST).permitAll()
                 .antMatchers("/").hasAnyAuthority("USER", "MODERATOR", "ADMIN")

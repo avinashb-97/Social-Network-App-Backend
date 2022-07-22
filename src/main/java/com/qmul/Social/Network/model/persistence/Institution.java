@@ -26,6 +26,9 @@ public class Institution {
     private Set<User> users;
 
     private String code;
+    
+    @OneToMany(mappedBy = "institution", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Department> departments;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

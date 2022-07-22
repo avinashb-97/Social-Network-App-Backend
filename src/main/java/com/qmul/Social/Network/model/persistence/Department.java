@@ -1,13 +1,16 @@
 package com.qmul.Social.Network.model.persistence;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 public class Department {
 
@@ -16,6 +19,10 @@ public class Department {
     private long id;
 
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "institution_id", nullable = false)
+    private Institution institution;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<User> users;
