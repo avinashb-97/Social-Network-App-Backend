@@ -21,16 +21,23 @@ public class DepartmentDTO {
 
     private Date createdTime;
 
+    private List<CourseDTO> courses;
+
     public static DepartmentDTO convertEntityToDepartmentDTO(Department department)
     {
         DepartmentDTO departmentDTO = new DepartmentDTO();
         BeanUtils.copyProperties(department, departmentDTO);
+        departmentDTO.setCourses(CourseDTO.convertEntityListToCourseDTOList(department.getCourses()));
         return departmentDTO;
     }
 
     public static List<DepartmentDTO> convertEntityListToDepartmentDTOList(Set<Department> departmentSet)
     {
         List<DepartmentDTO> departmentDTOList = new ArrayList<>();
+        if(departmentSet.isEmpty())
+        {
+            return departmentDTOList;
+        }
         for(Department department : departmentSet)
         {
             departmentDTOList.add(convertEntityToDepartmentDTO(department));

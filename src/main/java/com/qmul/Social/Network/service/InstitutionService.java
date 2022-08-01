@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 
 @Service
 public class InstitutionService {
@@ -32,14 +32,27 @@ public class InstitutionService {
 
         Institution institution = new Institution();
         institution.setName(instituionName);
+        institution.setCode(generateShareCode());
         institution = institutionRepository.save(institution);
         User user = userService.createInstitutionAdmin(adminMail, password, institution);
         institution.setUsers(new HashSet(){{add(user);}});
         return institution;
     }
 
+    private String generateShareCode()
+    {
+        Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+        return String.valueOf(number);
+    }
+
     public Institution getCurrentInstitution()
     {
         return userService.getCurrentUser().getInstitution();
+    }
+
+    public List<Institution> getAllInstitutions()
+    {
+        return institutionRepository.findAll();
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/api/institute")
 @RestController
 public class InstitutionController {
@@ -22,7 +24,6 @@ public class InstitutionController {
     @PostMapping("/create")
     public ResponseEntity<InstitutionDTO> createUser(@RequestBody CreateInstitutionRequest createInstitutionRequest)
     {
-
         String password = createInstitutionRequest.getPassword();
         if(!isPasswordStrong(password, createInstitutionRequest.getConfirmPassword()))
         {
@@ -33,6 +34,13 @@ public class InstitutionController {
                 createInstitutionRequest.getAdminMail(), password);
         logger.info("[Create Institution] Institution Creation successful, Institution -> "+ institution.getName());
         return ResponseEntity.ok(InstitutionDTO.convertEntityToInstitutionDTO(institution));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<InstitutionDTO>> getInstitutions()
+    {
+        List<Institution> institutions = institutionService.getAllInstitutions();
+        return ResponseEntity.ok(InstitutionDTO.convertEntityListToInstitutionDTOList(institutions));
     }
 
     private boolean isPasswordStrong(String password, String confirmPassword)

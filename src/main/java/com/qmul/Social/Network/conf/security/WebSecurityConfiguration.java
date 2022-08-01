@@ -43,8 +43,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
                 .antMatchers(HttpMethod.POST, SecurityConstants.INSTITUTE_SIGN_UP_URL).permitAll()
-
-//                .antMatchers(HttpMethod.GET, "/api/product/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/institute/**").permitAll()
 //                .antMatchers("/api/product/**").hasAnyAuthority("MODERATOR", "ADMIN")
 //
 //                .antMatchers(HttpMethod.GET, "/api/category/**").permitAll()
