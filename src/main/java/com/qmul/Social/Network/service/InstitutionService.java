@@ -1,9 +1,11 @@
 package com.qmul.Social.Network.service;
 
+import com.qmul.Social.Network.exception.InstitutionNotFoundException;
 import com.qmul.Social.Network.model.persistence.Institution;
 import com.qmul.Social.Network.model.persistence.User;
 import com.qmul.Social.Network.model.repository.InstitutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ public class InstitutionService {
     private InstitutionRepository institutionRepository;
 
     @Autowired
+    @Lazy
     private UserService userService;
 
     @Autowired
@@ -54,5 +57,18 @@ public class InstitutionService {
     public List<Institution> getAllInstitutions()
     {
         return institutionRepository.findAll();
+    }
+
+    public Institution getInstitutionById(Long id) {
+        Institution institution = null;
+        try
+        {
+            institution = institutionRepository.getReferenceById(id);
+        }
+        catch (Exception e)
+        {
+            throw new InstitutionNotFoundException("Institution Not Found " +id);
+        }
+        return institution;
     }
 }

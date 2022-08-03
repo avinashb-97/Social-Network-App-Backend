@@ -31,7 +31,7 @@ public class CourseDTO {
     public static List<CourseDTO> convertEntityListToCourseDTOList(Set<Course> courseSet)
     {
         List<CourseDTO> courseDTOList = new ArrayList<>();
-        if(courseSet.isEmpty())
+        if(courseSet == null || courseSet.isEmpty())
         {
             return courseDTOList;
         }

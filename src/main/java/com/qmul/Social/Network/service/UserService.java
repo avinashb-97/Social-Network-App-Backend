@@ -1,7 +1,6 @@
 package com.qmul.Social.Network.service;
 
 
-import com.qmul.Social.Network.conf.constants.SecurityConstants;
 import com.qmul.Social.Network.exception.UserNotFoundException;
 import com.qmul.Social.Network.model.persistence.Institution;
 import com.qmul.Social.Network.model.persistence.User;
@@ -25,6 +24,12 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private InstitutionService institutionService;
+
+    @Autowired
+    private DepartmentService departmentService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -76,6 +81,26 @@ public class UserService {
         return user;
     }
 
+    public User createUser(String name, String password, String mail, Long instituteId, Long departmentId, Long courseid, String code)
+    {
+        Institution institution = institutionService.getInstitutionById(instituteId);
+        if(!institution.getCode().equals(code))
+        {
+            throw new RuntimeException("Invalid Share Code");
+        }
+        User user = new User();
+        user.setName(name);
+        user.setEmail(mail);
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        user = addUserRoleToUser(user);
+        user.setInstitution(institution);
+        user.setDepartment(departmentService.getDepartmentByID(departmentId));
+        user.setCourse(departmentService.getCourseById(courseid));
+        user.setEnabled(true);
+        user = userRepository.save(user);
+        return user;
+    }
+
     public User createInstitutionAdmin(String adminMail, String password, Institution institution)
     {
         User user = new User();
@@ -86,10 +111,21 @@ public class UserService {
 
     private User addAdminRoleToUser(User user)
     {
+        return setRoleForUser(user, true, false, false, false);
+    }
+
+    private User addUserRoleToUser(User user)
+    {
+        return setRoleForUser(user, false, false, true, false);
+    }
+
+    private User setRoleForUser(User user, boolean isAdmin, boolean isStaff, boolean isUser, boolean isRecruiter)
+    {
         Set<Role> roleSet = new HashSet<>();
-        roleSet.add(Role.USER);
-        roleSet.add(Role.STAFF);
-        roleSet.add(Role.ADMIN);
+        if(isUser) roleSet.add(Role.USER);
+        if(isStaff) roleSet.add(Role.STAFF);
+        if(isAdmin) roleSet.add(Role.ADMIN);
+        if(isRecruiter) roleSet.add(Role.RECRUITER);
         user.setRoles(roleSet);
         return user;
     }
