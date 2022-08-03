@@ -33,6 +33,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Post> posts;
+
     @ManyToOne
     @JoinColumn(name = "institution_id", nullable = false)
     private Institution institution;
