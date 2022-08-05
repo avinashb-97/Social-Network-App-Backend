@@ -1,6 +1,7 @@
 package com.qmul.Social.Network.dto;
 
 import com.qmul.Social.Network.model.persistence.Post;
+import com.qmul.Social.Network.model.persistence.PostComment;
 import com.qmul.Social.Network.model.persistence.User;
 import com.qmul.Social.Network.utils.AuthUtil;
 import com.qmul.Social.Network.utils.HelperUtil;
@@ -9,9 +10,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,6 +36,8 @@ public class PostDTO {
 
     private Date createdTime;
 
+    private List<CommentDTO> comments;
+
     public static PostDTO convertEntityToPostDTO(Post post)
     {
         PostDTO postDTO = new PostDTO();
@@ -43,14 +48,21 @@ public class PostDTO {
             String imageUrl = HelperUtil.getImageUrl(post.getImage(), post.getImage().getId());
             postDTO.setImageUrl(imageUrl);
         }
-        postDTO.setLikesCount(post.getLikedUsers().size());
-        for(User user : post.getLikedUsers())
+        if(post.getLikedUsers() != null)
         {
-            if(user.getEmail().equals(AuthUtil.getLoggedInUserName()))
+            postDTO.setLikesCount(post.getLikedUsers().size());
+            for(User user : post.getLikedUsers())
             {
-                postDTO.setLikedByUser(true);
-                break;
+                if(user.getEmail().equals(AuthUtil.getLoggedInUserName()))
+                {
+                    postDTO.setLikedByUser(true);
+                    break;
+                }
             }
+        }
+        if(post.getPostComments() != null)
+        {
+            postDTO.setComments(CommentDTO.convertEntityListToCommentDTOList(post.getPostComments()));
         }
         return postDTO;
     }

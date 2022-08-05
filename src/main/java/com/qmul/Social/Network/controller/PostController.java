@@ -4,6 +4,7 @@ package com.qmul.Social.Network.controller;
 import com.qmul.Social.Network.dto.PostDTO;
 import com.qmul.Social.Network.model.persistence.Post;
 import com.qmul.Social.Network.model.persistence.PostImage;
+import com.qmul.Social.Network.model.requests.CreateCommentRequest;
 import com.qmul.Social.Network.model.requests.CreatePostRequest;
 import com.qmul.Social.Network.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,13 @@ public class PostController {
     public ResponseEntity<PostDTO> unlikePost(@PathVariable("id") long postId)
     {
         Post post = postService.unlikePostById(postId);
+        return ResponseEntity.ok(PostDTO.convertEntityToPostDTO(post));
+    }
+
+    @PostMapping("/{id}/comment")
+    public ResponseEntity<PostDTO> addComment(@PathVariable("id") long postId, @RequestBody CreateCommentRequest commentRequest)
+    {
+        Post post = postService.addCommentForPost(postId, commentRequest.getComment());
         return ResponseEntity.ok(PostDTO.convertEntityToPostDTO(post));
     }
 

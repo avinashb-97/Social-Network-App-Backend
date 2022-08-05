@@ -7,12 +7,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-public class Post {
+public class PostComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,12 +23,9 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id", referencedColumnName = "id")
-    private PostImage image;
-
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<PostComment> postComments;
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -41,7 +37,4 @@ public class Post {
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
-    @ManyToMany
-    @JoinTable(name = "user_like", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "post_id"))
-    private Set<User> likedUsers;
 }

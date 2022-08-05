@@ -28,6 +28,19 @@ public class PostService {
     @Autowired
     private UserService userService;
 
+    public Post addCommentForPost(long postId, String content)
+    {
+        Post post = getPostById(postId);
+        User currUser = userService.getCurrentUser();
+        PostComment comment = new PostComment();
+        comment.setContent(content);
+        comment.setUser(currUser);
+        comment.setPost(post);
+        post.getPostComments().add(comment);
+        post = postRepository.save(post);
+        return post;
+    }
+
     public Post likePostById(long postId)
     {
         Post post = getPostById(postId);
@@ -79,6 +92,8 @@ public class PostService {
         Post post = new Post();
         post.setContent(content);
         post.setUser(userService.getCurrentUser());
+        post.setPostComments(new HashSet());
+        post.setLikedUsers(new HashSet());
         if(image != null && image.getSize() > 0)
         {
             PostImage postImage = new PostImage();
