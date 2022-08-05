@@ -2,8 +2,10 @@ package com.qmul.Social.Network.model.persistence;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -18,10 +20,17 @@ public class PostImage {
 
     private String contentType;
 
-    private String fileSize;
+    private Long fileSize;
 
     @OneToOne(mappedBy = "image")
     private Post post;
 
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] data;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_time")
+    private Date createdTime;
 }

@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.awt.*;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -38,4 +39,7 @@ public class Post {
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
+    @ManyToMany
+    @JoinTable(name = "user_like", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "post_id"))
+    private Set<User> likedUsers;
 }
