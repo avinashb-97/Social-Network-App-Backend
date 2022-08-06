@@ -4,9 +4,11 @@ import com.qmul.Social.Network.exception.CourseNotFoundException;
 import com.qmul.Social.Network.exception.DepartmentNotFoundException;
 import com.qmul.Social.Network.model.persistence.Course;
 import com.qmul.Social.Network.model.persistence.Department;
+import com.qmul.Social.Network.model.persistence.User;
 import com.qmul.Social.Network.model.repository.CourseRepository;
 import com.qmul.Social.Network.model.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -22,6 +24,16 @@ public class DepartmentService {
 
     @Autowired
     private InstitutionService institutionService;
+
+    @Lazy
+    @Autowired
+    private UserService userService;
+
+    public Department getCurrentUserPeers()
+    {
+        User user = userService.getCurrentUser();
+        return user.getDepartment();
+    }
 
     public Department createDepartmentForCurrentInstitution(String departmentName)
     {

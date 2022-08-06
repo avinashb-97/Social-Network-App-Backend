@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,14 +29,14 @@ public class UserDTO {
         return userDTO;
     }
 
-//    public static List<UserDTO> convertEntityListToInstitutionDTOList(List<Institution> institutions)
-//    {
-//        List<InstitutionDTO> institutionDTOS = new ArrayList<>();
-//        for(Institution institution : institutions)
-//        {
-//            institutionDTOS.add(convertEntityToInstitutionDTO(institution));
-//        }
-//        return institutionDTOS;
-//    }
+    public static List<UserDTO> convertEntityListToUserDTOList(Set<User> userSet)
+    {
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for(User user : userSet)
+        {
+            userDTOS.add(convertEntityToUserDTO(user));
+        }
+        return userDTOS;
+    }
 
 }

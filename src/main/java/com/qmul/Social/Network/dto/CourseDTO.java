@@ -21,10 +21,16 @@ public class CourseDTO {
 
     private Date createdTime;
 
+    private List<UserDTO> users;
+
     public static CourseDTO convertEntityToCourseDTO(Course course)
     {
         CourseDTO courseDTO = new CourseDTO();
         BeanUtils.copyProperties(course, courseDTO);
+        if(course.getUsers() != null)
+        {
+            courseDTO.setUsers(UserDTO.convertEntityListToUserDTOList(course.getUsers()));
+        }
         return courseDTO;
     }
 

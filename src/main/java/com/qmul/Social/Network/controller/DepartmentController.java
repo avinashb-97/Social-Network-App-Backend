@@ -96,5 +96,12 @@ public class DepartmentController {
         return ResponseEntity.accepted().build();
     }
 
+    @GetMapping("/peers")
+    public ResponseEntity<DepartmentDTO> getCurrentDepartmentPeers()
+    {
+        Department department = departmentService.getCurrentUserPeers();
+        return ResponseEntity.ok(DepartmentDTO.convertEntityToDepartmentDTO(department));
+    }
+
 
 }
