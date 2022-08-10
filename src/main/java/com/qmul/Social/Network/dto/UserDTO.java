@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -22,10 +20,18 @@ public class UserDTO {
 
     private String email;
 
+    private UserProfileDTO userProfile;
+
+    private Date createdTime;
+
     public static UserDTO convertEntityToUserDTO(User user)
     {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
+        if(user.getProfile() != null)
+        {
+            userDTO.setUserProfile(UserProfileDTO.convertEntityToUserProfileDTO(user.getProfile()));
+        }
         return userDTO;
     }
 
@@ -36,6 +42,7 @@ public class UserDTO {
         {
             userDTOS.add(convertEntityToUserDTO(user));
         }
+        Collections.sort(userDTOS, (a, b) -> a.getCreatedTime().compareTo(b.getCreatedTime()));
         return userDTOS;
     }
 

@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -41,6 +38,7 @@ public class CommentDTO {
         {
             commentDTOS.add(convertEntityToCommentDTO(comment));
         }
+        Collections.sort(commentDTOS, (a, b) -> a.getCreatedTime().compareTo(b.getCreatedTime()));
         return commentDTOS;
     }
 

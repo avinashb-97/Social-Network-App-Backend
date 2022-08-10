@@ -36,6 +36,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Post> posts;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Event> events;
+
     @ManyToMany(mappedBy = "likedUsers")
     private Set<Post> likedPosts;
 
@@ -65,6 +68,10 @@ public class User {
 
     @Column(nullable = false, columnDefinition = "tinyint(1) default 0")
     private boolean isDummyUser;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    private UserProfile profile;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

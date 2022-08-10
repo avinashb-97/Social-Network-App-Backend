@@ -1,5 +1,6 @@
 package com.qmul.Social.Network.dto;
 
+import com.qmul.Social.Network.conf.constants.AppConstants;
 import com.qmul.Social.Network.model.persistence.Post;
 import com.qmul.Social.Network.model.persistence.PostComment;
 import com.qmul.Social.Network.model.persistence.User;
@@ -45,7 +46,7 @@ public class PostDTO {
         postDTO.setCreatedUser(UserDTO.convertEntityToUserDTO(post.getUser()));
         if(post.getImage() != null)
         {
-            String imageUrl = HelperUtil.getImageUrl(post.getImage(), post.getImage().getId());
+            String imageUrl = HelperUtil.getImageUrl(post.getImage().getFileSize(), post.getImage().getId(), AppConstants.postImageUrl);
             postDTO.setImageUrl(imageUrl);
         }
         if(post.getLikedUsers() != null)

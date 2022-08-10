@@ -1,21 +1,17 @@
 package com.qmul.Social.Network.utils;
 
-import com.qmul.Social.Network.model.persistence.PostImage;
-
 public class HelperUtil {
 
-    public static final String imageUrl = "/api/post/{id}/image";
-
-    public static String getImageUrl(PostImage image, Long postId)
+    public static String getImageUrl(long filesize, Long imageId, String imageUrl)
     {
         String baseUrl = AuthUtil.getBaseUrl();
         try
         {
-            long size = image.getFileSize();
+            long size = filesize;
             if(size > 0)
             {
                 String url = baseUrl+imageUrl;
-                url = url.replace("{id}", postId.toString());
+                url = url.replace("{id}", imageId.toString());
                 return url;
             }
         }

@@ -45,7 +45,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, SecurityConstants.INSTITUTE_SIGN_UP_URL).permitAll()
                 .antMatchers(HttpMethod.GET, "/api/institute/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/post/**").permitAll()
+                .requestMatchers(req-> req.getRequestURI().contains("image")).permitAll()
 //                .antMatchers("/api/product/**").hasAnyAuthority("MODERATOR", "ADMIN")
 //
 //                .antMatchers(HttpMethod.GET, "/api/category/**").permitAll()

@@ -1,18 +1,26 @@
 package com.qmul.Social.Network.controller;
 
 
+import com.qmul.Social.Network.dto.EventDTO;
 import com.qmul.Social.Network.dto.InstitutionDTO;
 import com.qmul.Social.Network.dto.UserDTO;
-import com.qmul.Social.Network.model.persistence.Institution;
-import com.qmul.Social.Network.model.persistence.User;
+import com.qmul.Social.Network.model.persistence.*;
+import com.qmul.Social.Network.model.persistence.enums.EventVisibility;
 import com.qmul.Social.Network.model.requests.CreateInstitutionRequest;
 import com.qmul.Social.Network.model.requests.CreateUserRequest;
 import com.qmul.Social.Network.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Date;
 
 @RequestMapping("/api/user")
 @RestController
@@ -27,6 +35,13 @@ public class UserController {
     public ResponseEntity<UserDTO> getCurrentUser()
     {
         User user = userService.getCurrentUser();
+        return ResponseEntity.ok(UserDTO.convertEntityToUserDTO(user));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id)
+    {
+        User user = userService.getUserById(id);
         return ResponseEntity.ok(UserDTO.convertEntityToUserDTO(user));
     }
 
@@ -51,9 +66,34 @@ public class UserController {
         return ResponseEntity.ok(UserDTO.convertEntityToUserDTO(user));
     }
 
+    @PutMapping("/{id}/profile")
+    public ResponseEntity<UserDTO> createEvent(@RequestParam(required = false) String headline,
+                                                @RequestParam(required = false) String bio,
+                                                @RequestParam(required = false) String facebook,
+                                                @RequestParam(required = false) String instagram,
+                                                @RequestParam(required = false) String youtube,
+                                                @RequestParam(required = false) String linkedin,
+                                                @RequestParam(required = false) String twitter,
+                                                @RequestParam(required = false) MultipartFile image) throws IOException {
+
+
+        User user = userService.updateUserProfile(headline, bio, facebook, instagram, youtube, linkedin, twitter, image);
+        return ResponseEntity.ok(UserDTO.convertEntityToUserDTO(user));
+    }
+
     private boolean isPasswordStrong(String password, String confirmPassword)
     {
         return (password.length() >= 8 && confirmPassword.equals(password));
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<ByteArrayResource> getImage(@PathVariable("id") long imageId)
+    {
+        UserProfilePic image = userService.getProfileImageByImageId(imageId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(image.getContentType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION,"inline; filename= "+image.getFilename())
+                .body(new ByteArrayResource(image.getData()));
     }
 
 }

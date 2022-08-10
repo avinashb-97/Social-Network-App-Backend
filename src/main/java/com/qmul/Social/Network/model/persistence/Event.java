@@ -1,5 +1,7 @@
 package com.qmul.Social.Network.model.persistence;
 
+
+import com.qmul.Social.Network.model.persistence.enums.EventVisibility;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,12 +9,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-public class Department {
+public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,18 +21,27 @@ public class Department {
 
     private String name;
 
+    private String place;
+
+    private String description;
+
+    private Date eventDateTime;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @ManyToOne
     @JoinColumn(name = "institution_id", nullable = false)
     private Institution institution;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<User> users;
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Course> courses;
-
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Event> events;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private EventImage image;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -43,4 +53,6 @@ public class Department {
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
+    @Enumerated(EnumType.STRING)
+    private EventVisibility visibility;
 }

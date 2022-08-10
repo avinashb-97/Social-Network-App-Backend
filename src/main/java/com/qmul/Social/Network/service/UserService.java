@@ -2,9 +2,9 @@ package com.qmul.Social.Network.service;
 
 
 import com.qmul.Social.Network.exception.UserNotFoundException;
-import com.qmul.Social.Network.model.persistence.Institution;
-import com.qmul.Social.Network.model.persistence.User;
+import com.qmul.Social.Network.model.persistence.*;
 import com.qmul.Social.Network.model.persistence.enums.Role;
+import com.qmul.Social.Network.model.repository.UserProfilePicRepository;
 import com.qmul.Social.Network.model.repository.UserRepository;
 import com.qmul.Social.Network.utils.AuthUtil;
 import org.slf4j.Logger;
@@ -13,13 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
-@Transactional
 public class UserService {
 
     @Autowired
@@ -34,12 +36,29 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private UserProfilePicRepository userProfilePicRepository;
+
     Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public User getCurrentUser()
     {
         User user = getUserByEmail(AuthUtil.getLoggedInUserName());
         logger.info("Getting current user, userid -> "+user.getId());
+        return user;
+    }
+
+    public User getUserById(long id)
+    {
+        User user = null;
+        try
+        {
+            user = userRepository.getReferenceById(id);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("User Not Found " +id);
+        }
         return user;
     }
 
@@ -97,8 +116,60 @@ public class UserService {
         user.setDepartment(departmentService.getDepartmentByID(departmentId));
         user.setCourse(departmentService.getCourseById(courseid));
         user.setEnabled(true);
+        user.setProfile(new UserProfile());
         user = userRepository.save(user);
         return user;
+    }
+
+    public User updateUserProfile(String headline,
+                                  String bio,
+                                  String facebook,
+                                  String instagram,
+                                  String youtube,
+                                  String linkedin,
+                                  String twitter,
+                                  MultipartFile profilepic) throws IOException {
+
+        User user = getCurrentUser();
+        UserProfile userProfile = user.getProfile();
+        if(userProfile == null)
+        {
+            userProfile = new UserProfile();
+        }
+        userProfile.setHeadline(headline);
+        userProfile.setBio(bio);
+        userProfile.setFacebook(facebook);
+        userProfile.setInstagram(instagram);
+        userProfile.setYoutube(youtube);
+        userProfile.setLinkedin(linkedin);
+        userProfile.setTwitter(twitter);
+        if(profilepic != null)
+        {
+            UserProfilePic profilePic = new UserProfilePic();
+            profilePic.setContentType(profilepic.getContentType());
+            profilePic.setData(Base64.getEncoder().encode(profilepic.getBytes()));
+            profilePic.setFilename(profilepic.getOriginalFilename());
+            profilePic.setFileSize(profilepic.getSize());
+            userProfile.setImage(profilePic);
+        }
+        user.setProfile(userProfile);
+        user = userRepository.save(user);
+        return user;
+    }
+
+    public UserProfilePic getProfileImageByImageId(long imageId)
+    {
+        UserProfilePic profilePic = null;
+        try
+        {
+            profilePic = userProfilePicRepository.getReferenceById(imageId);
+            profilePic.setData(Base64.getDecoder().decode(profilePic.getData()));
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Image Not Found " +imageId);
+        }
+        return profilePic;
     }
 
     public User createInstitutionAdmin(String adminMail, String password, Institution institution)
