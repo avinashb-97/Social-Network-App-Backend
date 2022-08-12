@@ -3,6 +3,7 @@ package com.qmul.Social.Network.controller;
 
 import com.qmul.Social.Network.dto.UserDTO;
 import com.qmul.Social.Network.model.persistence.*;
+import com.qmul.Social.Network.model.persistence.enums.Role;
 import com.qmul.Social.Network.model.requests.CreateUserRequest;
 import com.qmul.Social.Network.service.UserService;
 import org.slf4j.Logger;
@@ -56,7 +57,8 @@ public class UserController {
         Long departmentId = createUserRequest.getDepartmentId();
         Long courseId = createUserRequest.getCourseId();
         String code = createUserRequest.getCode();
-        User user = userService.createUser(name, password, mail, institutionId, departmentId, courseId, code);
+        Role role = createUserRequest.getRole();
+        User user = userService.createUser(name, password, mail, role, institutionId, departmentId, courseId, code);
         logger.info("[Create User] User Creation successful, Institution -> "+ name);
         return ResponseEntity.ok(UserDTO.convertEntityToUserDTO(user));
     }

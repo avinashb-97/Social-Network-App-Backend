@@ -36,6 +36,13 @@ public class InstitutionController {
         return ResponseEntity.ok(InstitutionDTO.convertEntityToInstitutionDTO(institution));
     }
 
+    @GetMapping("/current")
+    public ResponseEntity<InstitutionDTO> getCurrentInstitution()
+    {
+        Institution institution = institutionService.getCurrentInstitution();
+        return ResponseEntity.ok(InstitutionDTO.convertEntityToInstitutionDTO(institution));
+    }
+
     @GetMapping
     public ResponseEntity<List<InstitutionDTO>> getInstitutions()
     {

@@ -100,7 +100,7 @@ public class UserService {
         return user;
     }
 
-    public User createUser(String name, String password, String mail, Long instituteId, Long departmentId, Long courseid, String code)
+    public User createUser(String name, String password, String mail, Role role, Long instituteId, Long departmentId, Long courseid, String code)
     {
         Institution institution = institutionService.getInstitutionById(instituteId);
         if(!institution.getCode().equals(code))
@@ -111,7 +111,14 @@ public class UserService {
         user.setName(name);
         user.setEmail(mail);
         user.setPassword(bCryptPasswordEncoder.encode(password));
-        user = addUserRoleToUser(user);
+        if(role == Role.STAFF )
+        {
+            user = addStaffRoleToUser(user);
+        }
+        else
+        {
+            user = addUserRoleToUser(user);
+        }
         user.setInstitution(institution);
         user.setDepartment(departmentService.getDepartmentByID(departmentId));
         user.setCourse(departmentService.getCourseById(courseid));
@@ -188,6 +195,11 @@ public class UserService {
     private User addUserRoleToUser(User user)
     {
         return setRoleForUser(user, false, false, true, false);
+    }
+
+    private User addStaffRoleToUser(User user)
+    {
+        return setRoleForUser(user, false, true, true, false);
     }
 
     private User setRoleForUser(User user, boolean isAdmin, boolean isStaff, boolean isUser, boolean isRecruiter)

@@ -1,5 +1,6 @@
 package com.qmul.Social.Network.model.requests;
 
+import com.qmul.Social.Network.model.persistence.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,7 @@ public class CreateUserRequest {
     private Long courseId;
 
     private String code;
+
+    private Role role;
 
 }

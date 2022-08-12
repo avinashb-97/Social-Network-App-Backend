@@ -37,6 +37,19 @@ public class EventController {
         return ResponseEntity.ok(EventDTO.convertEntityToEventDTO(event));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<EventDTO> createEvent(@PathVariable("id") long eventId,
+                                                @RequestParam String name,
+                                                @RequestParam String place,
+                                                @RequestParam String desc,
+                                                @RequestParam Date eventTime,
+                                                @RequestParam(required = false) MultipartFile image,
+                                                @RequestParam Visibility visibility) throws IOException {
+
+        Event event = eventService.editEvent(eventId, name, place, desc, eventTime, visibility, image);
+        return ResponseEntity.ok(EventDTO.convertEntityToEventDTO(event));
+    }
+
     @GetMapping
     public ResponseEntity<List<EventDTO>> getEvents()
     {

@@ -51,6 +51,31 @@ public class EventService {
         return event;
     }
 
+    public Event editEvent(long eventId,String name, String place, String desc, Date dateTime, Visibility visibility, MultipartFile image ) throws IOException {
+        Event event = eventRepository.getReferenceById(eventId);
+        User user = userService.getCurrentUser();
+        if (event.getUser() != user)
+        {
+            throw new SecurityException("Only created user can edit event");
+        }
+        event.setName(name);
+        event.setDescription(desc);
+        event.setPlace(place);
+        event.setEventDateTime(dateTime);
+        event.setVisibility(visibility);
+        if(image != null)
+        {
+            EventImage eventImage = new EventImage();
+            eventImage.setContentType(image.getContentType());
+            eventImage.setData(Base64.getEncoder().encode(image.getBytes()));
+            eventImage.setFilename(image.getOriginalFilename());
+            eventImage.setFileSize(image.getSize());
+            event.setImage(eventImage);
+        }
+        event = eventRepository.save(event);
+        return event;
+    }
+
     public EventImage getEventImageById(long imageId)
     {
         EventImage eventImage = null;
