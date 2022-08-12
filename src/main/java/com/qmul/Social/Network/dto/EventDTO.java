@@ -2,7 +2,7 @@ package com.qmul.Social.Network.dto;
 
 import com.qmul.Social.Network.conf.constants.AppConstants;
 import com.qmul.Social.Network.model.persistence.Event;
-import com.qmul.Social.Network.model.persistence.enums.EventVisibility;
+import com.qmul.Social.Network.model.persistence.enums.Visibility;
 import com.qmul.Social.Network.utils.HelperUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,7 +32,7 @@ public class EventDTO {
 
     private Date eventDateTime;
 
-    private EventVisibility visibility;
+    private Visibility visibility;
 
     public static EventDTO convertEntityToEventDTO(Event event)
     {

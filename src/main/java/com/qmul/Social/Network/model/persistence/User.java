@@ -39,6 +39,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Event> events;
 
+    @OneToMany(mappedBy = "createdUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Group> createdGroups;
+
     @ManyToMany(mappedBy = "likedUsers")
     private Set<Post> likedPosts;
 
@@ -59,6 +62,12 @@ public class User {
 
     @ManyToMany(mappedBy = "users")
     private Set<Module> modules;
+
+    @ManyToMany(mappedBy = "joinedUsers")
+    private Set<Group> joinedGroups;
+
+    @ManyToMany(mappedBy = "pendingUsers")
+    private Set<Group> pendingGroups;
 
     @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     private boolean accountNonLocked = true;

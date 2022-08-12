@@ -1,7 +1,7 @@
 package com.qmul.Social.Network.model.requests;
 
 
-import com.qmul.Social.Network.model.persistence.enums.EventVisibility;
+import com.qmul.Social.Network.model.persistence.enums.Visibility;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +26,6 @@ public class CreateEventRequest {
 
     private MultipartFile image;
 
-    private EventVisibility visibility;
+    private Visibility visibility;
 
 }

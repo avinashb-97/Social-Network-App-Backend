@@ -31,6 +31,9 @@ public class Institution {
     private Set<Department> departments;
 
     @OneToMany(mappedBy = "institution", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Group> groups;
+
+    @OneToMany(mappedBy = "institution", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Event> events;
 
     @CreationTimestamp

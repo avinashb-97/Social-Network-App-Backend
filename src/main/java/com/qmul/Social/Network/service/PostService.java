@@ -85,7 +85,17 @@ public class PostService {
         {
             posts.addAll(curr.getPosts());
         }
-        return posts;
+
+        Set<Post> res = new HashSet<>();
+        for(Post post : posts)
+        {
+            if(post.getUserGroup() == null)
+            {
+                res.add(post);
+            }
+        }
+
+        return res;
     }
 
     public Post createPostForCurrentUser(String content, MultipartFile image) throws IOException {

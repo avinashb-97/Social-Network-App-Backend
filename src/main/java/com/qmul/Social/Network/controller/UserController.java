@@ -1,12 +1,8 @@
 package com.qmul.Social.Network.controller;
 
 
-import com.qmul.Social.Network.dto.EventDTO;
-import com.qmul.Social.Network.dto.InstitutionDTO;
 import com.qmul.Social.Network.dto.UserDTO;
 import com.qmul.Social.Network.model.persistence.*;
-import com.qmul.Social.Network.model.persistence.enums.EventVisibility;
-import com.qmul.Social.Network.model.requests.CreateInstitutionRequest;
 import com.qmul.Social.Network.model.requests.CreateUserRequest;
 import com.qmul.Social.Network.service.UserService;
 import org.slf4j.Logger;
@@ -20,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Date;
 
 @RequestMapping("/api/user")
 @RestController
@@ -94,6 +89,20 @@ public class UserController {
                 .contentType(MediaType.parseMediaType(image.getContentType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION,"inline; filename= "+image.getFilename())
                 .body(new ByteArrayResource(image.getData()));
+    }
+
+    @PostMapping("/changepassword")
+    public ResponseEntity changepassword(@RequestParam String oldpass,
+                                                  @RequestParam String newpass,
+                                                  @RequestParam String confirmpass)
+    {
+
+        if(!newpass.equals(confirmpass))
+        {
+            return ResponseEntity.badRequest().build();
+        }
+        userService.changePasswordForCurrentUser(oldpass, newpass);
+        return ResponseEntity.ok().build();
     }
 
 }

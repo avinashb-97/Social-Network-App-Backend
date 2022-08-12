@@ -1,6 +1,6 @@
 package com.qmul.Social.Network.model.persistence;
 
-
+import com.qmul.Social.Network.model.persistence.enums.GroupType;
 import com.qmul.Social.Network.model.persistence.enums.Visibility;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,11 +9,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-public class Event {
+@Table(name = "USER_GROUP")
+public class Group {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,15 +23,22 @@ public class Event {
 
     private String name;
 
-    private String place;
-
     private String description;
-
-    private Date eventDateTime;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User createdUser;
+
+    @OneToMany(mappedBy = "userGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Post> posts;
+
+    @ManyToMany
+    @JoinTable(name = "user_joined", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private Set<User> joinedUsers;
+
+    @ManyToMany
+    @JoinTable(name = "user_pending", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "post_id"))
+    private Set<User> pendingUsers;
 
     @ManyToOne
     @JoinColumn(name = "institution_id", nullable = false)
@@ -41,7 +50,7 @@ public class Event {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id", referencedColumnName = "id")
-    private EventImage image;
+    private GroupImage image;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -55,4 +64,8 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     private Visibility visibility;
+
+    @Enumerated(EnumType.STRING)
+    private GroupType type;
+
 }

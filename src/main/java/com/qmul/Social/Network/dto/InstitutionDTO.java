@@ -30,7 +30,7 @@ public class InstitutionDTO {
     {
         InstitutionDTO institutionDTO = new InstitutionDTO();
         BeanUtils.copyProperties(institution, institutionDTO);
-        if(!institution.getDepartments().isEmpty())
+        if(institution.getDepartments() != null)
         {
             institutionDTO.setDepartments(DepartmentDTO.convertEntityListToDepartmentDTOList(institution.getDepartments()));
         }

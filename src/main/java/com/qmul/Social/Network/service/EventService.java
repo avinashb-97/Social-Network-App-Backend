@@ -1,10 +1,7 @@
 package com.qmul.Social.Network.service;
 
-import com.qmul.Social.Network.model.persistence.Department;
-import com.qmul.Social.Network.model.persistence.Event;
-import com.qmul.Social.Network.model.persistence.EventImage;
-import com.qmul.Social.Network.model.persistence.User;
-import com.qmul.Social.Network.model.persistence.enums.EventVisibility;
+import com.qmul.Social.Network.model.persistence.*;
+import com.qmul.Social.Network.model.persistence.enums.Visibility;
 import com.qmul.Social.Network.model.repository.EventImageRepository;
 import com.qmul.Social.Network.model.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +26,7 @@ public class EventService {
     @Autowired
     private UserService userService;
 
-    public Event createEvent(String name, String place, String desc, Date dateTime, EventVisibility visibility, MultipartFile image) throws IOException {
+    public Event createEvent(String name, String place, String desc, Date dateTime, Visibility visibility, MultipartFile image) throws IOException {
 
         Event event = new Event();
         User user = userService.getCurrentUser();
@@ -54,13 +51,28 @@ public class EventService {
         return event;
     }
 
+    public EventImage getEventImageById(long imageId)
+    {
+        EventImage eventImage = null;
+        try
+        {
+            eventImage = eventImageRepository.getReferenceById(imageId);
+            eventImage.setData(Base64.getDecoder().decode(eventImage.getData()));
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Image Not Found " +imageId);
+        }
+        return eventImage;
+    }
+
     public Set<Event> getEventsForCurrentUser()
     {
         User user = userService.getCurrentUser();
         Department department = user.getDepartment();
         Set<Event> events = department.getEvents();
-        events.addAll(getAllowedInstitutionEvents(events));
-        Set<Event> openEvent = eventRepository.findEventByVisibility(EventVisibility.EVERYONE);
+        events.addAll(getAllowedInstitutionEvents(user.getInstitution().getEvents()));
+        Set<Event> openEvent = eventRepository.findEventByVisibility(Visibility.EVERYONE);
         events.addAll(openEvent);
         return events;
     }
@@ -70,7 +82,7 @@ public class EventService {
         Set<Event> eventSet = new HashSet<>();
         for(Event event : events)
         {
-            if(event.getVisibility() == EventVisibility.UNIVERSITY)
+            if(event.getVisibility() == Visibility.UNIVERSITY)
             {
                 eventSet.add(event);
             }
