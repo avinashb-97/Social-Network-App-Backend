@@ -3,6 +3,7 @@ package com.qmul.Social.Network.service;
 import com.qmul.Social.Network.exception.InstitutionNotFoundException;
 import com.qmul.Social.Network.model.persistence.Institution;
 import com.qmul.Social.Network.model.persistence.User;
+import com.qmul.Social.Network.model.persistence.enums.Role;
 import com.qmul.Social.Network.model.repository.InstitutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @Service
 public class InstitutionService {
@@ -71,4 +73,60 @@ public class InstitutionService {
         }
         return institution;
     }
+
+    public User enableUserAccount(long id)
+    {
+        if(!isUserInCurrentInstitute(id))
+        {
+            throw new SecurityException("User does not have access to edit other institute user accounts");
+        }
+        return userService.enableAccount(id);
+    }
+
+    public User disableUserAccount(long id)
+    {
+        if(!isUserInCurrentInstitute(id))
+        {
+            throw new SecurityException("User does not have access to edit other institute user accounts");
+        }
+        return userService.disableAccount(id);
+    }
+
+    private boolean isUserInCurrentInstitute(long id)
+    {
+        User admin = userService.getCurrentUser();
+        User user = userService.getUserById(id);
+        return admin.getInstitution() == user.getInstitution();
+    }
+
+    public Set<User> getCurrentInstitutionStudents()
+    {
+        Institution institution = userService.getCurrentUser().getInstitution();
+        Set<User> users = institution.getUsers();
+        Set<User> students = new HashSet<>();
+        for(User user : users)
+        {
+            if(user.getRoles().contains(Role.USER) && !user.getRoles().contains(Role.STAFF) && !user.getRoles().contains(Role.ADMIN))
+            {
+                students.add(user);
+            }
+        }
+        return students;
+    }
+
+    public Set<User> getCurrentInstitutionStaffs()
+    {
+        Institution institution = userService.getCurrentUser().getInstitution();
+        Set<User> users = institution.getUsers();
+        Set<User> students = new HashSet<>();
+        for(User user : users)
+        {
+            if(user.getRoles().contains(Role.STAFF))
+            {
+                students.add(user);
+            }
+        }
+        return students;
+    }
+
 }

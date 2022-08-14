@@ -24,6 +24,12 @@ public class UserDTO {
 
     private Date createdTime;
 
+    private String course;
+
+    private String departmentName;
+
+    private boolean isEnabled;
+
     public static UserDTO convertEntityToUserDTO(User user)
     {
         UserDTO userDTO = new UserDTO();
@@ -32,6 +38,15 @@ public class UserDTO {
         {
             userDTO.setUserProfile(UserProfileDTO.convertEntityToUserProfileDTO(user.getProfile()));
         }
+        if(user.getCourse() != null)
+        {
+            userDTO.setCourse(user.getCourse().getName());
+        }
+        if(user.getDepartment() != null)
+        {
+            userDTO.setDepartmentName(user.getDepartment().getName());
+        }
+        userDTO.setEnabled(user.isEnabled());
         return userDTO;
     }
 

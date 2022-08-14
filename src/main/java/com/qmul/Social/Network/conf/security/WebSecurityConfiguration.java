@@ -46,21 +46,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/institute/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user/**").permitAll()
                 .requestMatchers(req-> req.getRequestURI().contains("image")).permitAll()
-//                .antMatchers("/api/product/**").hasAnyAuthority("MODERATOR", "ADMIN")
-//
-//                .antMatchers(HttpMethod.GET, "/api/category/**").permitAll()
-//                .antMatchers("/api/category/**").hasAnyAuthority("MODERATOR", "ADMIN")
-//
-//                .antMatchers(HttpMethod.GET, "/api/user/confirm-account").permitAll()
-//                .antMatchers(HttpMethod.POST, "/api/user/**").permitAll()
-//
-//                .antMatchers("/api/test/**").permitAll()
-//                .antMatchers("/api/order/**").hasAnyAuthority("USER")
-//                .antMatchers("/api/admin/**").hasAnyAuthority("MODERATOR", "ADMIN")
-//
-//                .antMatchers("/api/query").permitAll()
-//
-//                .antMatchers(HttpMethod.POST,"/api/guest/order").permitAll()
 
                 .antMatchers(SWAGGER_AUTH_WHITELIST).permitAll()
                 .antMatchers("/").hasAnyAuthority("USER", "MODERATOR", "ADMIN")
@@ -73,7 +58,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().configurationSource(request -> {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration.setAllowCredentials(true);
-            configuration.setAllowedOrigins(Arrays.asList("http://localhost","http://34.142.47.130"));
+            configuration.setAllowedOrigins(Arrays.asList("http://34.142.47.130","http://localhost"));
             configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
             configuration.setAllowedHeaders(Arrays.asList("X-Requested-With","Origin","Content-Type","Accept","Authorization"));
 

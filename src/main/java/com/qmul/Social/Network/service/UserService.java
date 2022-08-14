@@ -75,6 +75,23 @@ public class UserService {
 //        }
 //    }
 
+    public User enableAccount(long id)
+    {
+        User user = getUserById(id);
+        user.setEnabled(true);
+        user = userRepository.save(user);
+        return user;
+    }
+
+
+    public User disableAccount(long id)
+    {
+        User user = getUserById(id);
+        user.setEnabled(false);
+        user = userRepository.save(user);
+        return user;
+    }
+
     public User createUser(User user, String password)
     {
         return createUser(user, password, false);
@@ -118,10 +135,10 @@ public class UserService {
         else
         {
             user = addUserRoleToUser(user);
+            user.setCourse(departmentService.getCourseById(courseid));
         }
         user.setInstitution(institution);
         user.setDepartment(departmentService.getDepartmentByID(departmentId));
-        user.setCourse(departmentService.getCourseById(courseid));
         user.setEnabled(true);
         user.setProfile(new UserProfile());
         user = userRepository.save(user);
