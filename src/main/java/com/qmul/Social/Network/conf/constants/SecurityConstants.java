@@ -1,5 +1,7 @@
 package com.qmul.Social.Network.conf.constants;
 
+
+//Security Constants of the application
 public class SecurityConstants {
     public static final String SECRET = "socialNetwork2022";
     public static final long EXPIRATION_TIME = 864_000_000; // 10 days

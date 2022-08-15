@@ -1,7 +1,8 @@
 package com.qmul.Social.Network.conf.constants;
 
-public class AppConstants {
 
+//Constants used throughout the application
+public class AppConstants {
 
     public static final String postImageUrl = "/api/post/{id}/image";
 
