@@ -2,8 +2,10 @@ package com.qmul.Social.Network.controller;
 
 import com.qmul.Social.Network.dto.CourseDTO;
 import com.qmul.Social.Network.dto.DepartmentDTO;
+import com.qmul.Social.Network.dto.UserDTO;
 import com.qmul.Social.Network.model.persistence.Course;
 import com.qmul.Social.Network.model.persistence.Department;
+import com.qmul.Social.Network.model.persistence.User;
 import com.qmul.Social.Network.model.requests.CreateCourseRequest;
 import com.qmul.Social.Network.model.requests.CreateDepartmentRequest;
 import com.qmul.Social.Network.service.DepartmentService;
@@ -103,5 +105,10 @@ public class DepartmentController {
         return ResponseEntity.ok(DepartmentDTO.convertEntityToDepartmentDTO(department));
     }
 
-
+    @GetMapping("/staffs")
+    public ResponseEntity<List<UserDTO>> getCurrentDepartmentStaffs()
+    {
+        Set<User> users = departmentService.getCurrentDepartmentStaffs();
+        return ResponseEntity.ok(UserDTO.convertEntityListToUserDTOList(users));
+    }
 }

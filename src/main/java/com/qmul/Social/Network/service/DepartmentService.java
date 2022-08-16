@@ -5,6 +5,7 @@ import com.qmul.Social.Network.exception.DepartmentNotFoundException;
 import com.qmul.Social.Network.model.persistence.Course;
 import com.qmul.Social.Network.model.persistence.Department;
 import com.qmul.Social.Network.model.persistence.User;
+import com.qmul.Social.Network.model.persistence.enums.Role;
 import com.qmul.Social.Network.model.repository.CourseRepository;
 import com.qmul.Social.Network.model.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentService {
@@ -117,5 +119,11 @@ public class DepartmentService {
     public Set<Course> getAllCoursesOfDepartment(Long deptId)
     {
         return getDepartmentByID(deptId).getCourses();
+    }
+
+    public  Set<User> getCurrentDepartmentStaffs() {
+        Set<User> users = userService.getCurrentUser().getDepartment().getUsers();
+        Set<User> staffs = users.stream().filter(user -> user.getRoles().contains(Role.STAFF)).collect(Collectors.toSet());
+        return staffs;
     }
 }
